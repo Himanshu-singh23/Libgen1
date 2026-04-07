@@ -10,5 +10,6 @@ const ResourceSchema=new Schema({
 },{
     timestamps:true,
 });
+ResourceSchema.index({ title: "text" });
 const Resource=model("Resource",ResourceSchema);
 module.exports=Resource;

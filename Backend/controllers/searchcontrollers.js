@@ -9,12 +9,18 @@ const searchResources = async (req, res) => {
     }
 
     let query = {};
+    let projection={};
+    let sort={};
 
     switch (type) {
       case "title":
-        query = {
-          title: { $regex: q, $options: "i" }
-        };
+        if (q.length > 3) {
+          query = { $text: { $search: q } };
+          sort = { score: { $meta: "textScore" } };
+          projection = { score: { $meta: "textScore" } };
+        } else {
+          query = { title: { $regex: q, $options: "i" } };
+        }
         break;
 
       case "keywords":
@@ -59,8 +65,8 @@ const searchResources = async (req, res) => {
     }
 
     const results = await Resource
-      .find(query)
-      .sort({ publication_year: -1 });
+      .find(query, projection || {})
+      .sort(Object.keys(sort).length ?sort:{ publication_year: -1 });
 
     res.status(200).json(results);
 
