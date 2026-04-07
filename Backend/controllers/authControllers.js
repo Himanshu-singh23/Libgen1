@@ -9,7 +9,7 @@ const generateToken = (user) => {
 
 exports.signup = async (req, res) => {
     try {
-        const { name, email, password, role, adminSecret } = req.body;
+        const { name, email, password, role} = req.body;
 
         if (!name || !email || !password)
             return res.status(400).json({ message: "All fields are required" });
@@ -20,9 +20,6 @@ exports.signup = async (req, res) => {
 
         let finalRole = "user";
         if (role === "admin") {
-            if (adminSecret !== process.env.ADMIN_SECRET) {
-                return res.status(403).json({ message: "Invalid admin secret" });
-            }
             finalRole = "admin";
         }
 
