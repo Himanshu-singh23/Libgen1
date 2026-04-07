@@ -1,7 +1,7 @@
 import api from "./axios";
 const API_URL = "/auth";
 export const signup = async (formData) => {
-    const res=await api.post(`${API_URL}/signup`);
+    const res=await api.post(`${API_URL}/signup`,formData);
     return res.json();
 };
 export const login = async (formData) => {
